@@ -6,7 +6,6 @@ import webbrowser
 import os
 import smtplib
 
-contact = {'vaibhav': 'antrikshmisri61@gmail'}
 
 engine = a.init('sapi5')
 voices = engine.getProperty('voices')
