@@ -1,4 +1,4 @@
-import pyttsx3 as a
+import pyttsx3
 import datetime
 import speech_recognition as sr
 import wikipedia
@@ -6,13 +6,24 @@ import webbrowser
 import os
 import smtplib
 
-
-engine = a.init('sapi5')
+contact = {'vaibhav': 'antrikshmisri61@gmail'}
+engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 print(voices)
 
 engine.setProperty('voice', voices[0].id)
 
+def Tostring(s):
+    str = " "
+    return (str.join(s))
+
+def sendemail(to,content):
+    server = smtplib.SMTP('smtp.gmail.com',587)
+    server.ehlo()
+    server.starttls()
+    server.login('antrikshmisri61@gmail.com','Antriksh@123')
+    server.sendmail('antrikshmisri61@gmail.com',to,content)
+    server.close()
 
 def speak(audio):
     engine.say(audio)
@@ -48,27 +59,35 @@ def take():
         return query
 
 
+
+
 wishMe()
 while True:
     query = take().lower()
+    tempstring = query.split()
+
+    for i in range(1 , len(tempstring) - 1):
+        if(tempstring[i] == 'on' or 'On'):
+            newstring = tempstring[1:i]
+
     if 'wikipedia' in query:
         speak('Searching wikipedia')
         query = query.replace("wikipedia", "")
-        results = wikipedia.summary(query , sentences=1)
+        results = wikipedia.summary(query, sentences=1)
         speak("according to wikipedia")
         print(results)
         speak(results)
-    elif 'open youtube' in query:
+    elif 'search' and 'youtube' in query:
         speak("sure sir")
-        webbrowser.open("youtube.com")
+        webbrowser.open("https://youtube.com/results?search_query=" + Tostring(newstring), new=1, autoraise=True)
 
-    elif 'open google' in query:
+    elif 'search' and 'google' in query:
         speak("sure sir")
-        webbrowser.open("google.com")
+        webbrowser.open("http://www.google.com/search?q=" + Tostring(newstring), new=1, autoraise=True)
 
     elif 'open stackoverflow' in query:
         speak("sure sir")
-        webbrowser.open("stackoverflow.com")
+        webbrowser.open("https://stackoverflow.com")
 
     elif 'play music' in query:
         speak("sure sir")
@@ -81,12 +100,25 @@ while True:
         strTime = datetime.datetime.now().strftime("%H:%M:%S")
         speak(f"Sir the time is {strTime}")
 
-    # elif 'send email' in query:
-    #     try:
-    #         speak("To whom should i send the mail sir?")
-    #         w=take()
-    #         for w,m in  contact.items():
-    #             speak("what message should i send sir?")
-    #             content=take()
-    #             to= contact
-    #             sendemail(to,content)
+    elif 'send email' in query:
+        try:
+            speak("To whom should i send the mail sir?")
+            w=take()
+            for w,m in  contact.items():
+                speak("what message should i send sir?")
+                content=take()
+                to= contact
+                sendemail(to, content)
+
+        except Exception as e:
+            print(e)
+            speak("sorry sir, couldn't send mail")
+
+
+
+
+
+
+
+
+
