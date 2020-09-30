@@ -64,11 +64,12 @@ def take():
 wishMe()
 while True:
     query = take().lower()
-    tempstring = query.split()
+    searchstring = query.split()
 
-    for i in range(1 , len(tempstring) - 1):
-        if(tempstring[i] == 'on' or 'On'):
-            newstring = tempstring[1:i]
+    for i in range(1 , len(searchstring) - 1):
+        if(searchstring[i] == 'on' or 'On'):
+            newstring = searchstring[1:i]
+            website = searchstring[i+1:]
 
     if 'wikipedia' in query:
         speak('Searching wikipedia')
@@ -77,17 +78,11 @@ while True:
         speak("according to wikipedia")
         print(results)
         speak(results)
-    elif 'search' and 'youtube' in query:
-        speak("sure sir")
-        webbrowser.open("https://youtube.com/results?search_query=" + Tostring(newstring), new=1, autoraise=True)
+    elif 'search'  in query:
+        speak("sure sir , searching" + Tostring(newstring) + "on" + str(website[0]) + ",")
+        # noinspection PyUnboundLocalVariable
+        webbrowser.open("https://" + str(website[0]) + ".com" + "/search?q=" + Tostring(newstring), new=1, autoraise=True)
 
-    elif 'search' and 'google' in query:
-        speak("sure sir")
-        webbrowser.open("http://www.google.com/search?q=" + Tostring(newstring), new=1, autoraise=True)
-
-    elif 'open stackoverflow' in query:
-        speak("sure sir")
-        webbrowser.open("https://stackoverflow.com")
 
     elif 'play music' in query:
         speak("sure sir")
