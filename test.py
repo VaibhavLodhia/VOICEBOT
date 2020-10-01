@@ -21,8 +21,8 @@ def sendemail(to,content):
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.ehlo()
     server.starttls()
-    server.login('antrikshmisri61@gmail.com','Antriksh@123')
-    server.sendmail('antrikshmisri61@gmail.com',to,content)
+    server.login('youremail','yourpass')
+    server.sendmail('youremail',to,content)
     server.close()
 
 def speak(audio):
