@@ -5,17 +5,31 @@ import wikipedia
 import webbrowser
 import os
 import smtplib
+import app
 
 contact = {'vaibhav': 'antrikshmisri61@gmail'}
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 print(voices)
-
 engine.setProperty('voice', voices[0].id)
+
+
+#training the voicebot
+app.trainbot()
+
 
 def Tostring(s):
     str = " "
     return (str.join(s))
+
+def Findorder(s):
+    k=0
+    for i in range(len(s) - 1):
+        if(s[i] == 'on'):
+            k=i
+
+    return k
+
 
 def sendemail(to,content):
     server = smtplib.SMTP('smtp.gmail.com',587)
@@ -35,11 +49,11 @@ def wishMe():
     if hour >= 0 and hour < 12:
         speak("good morning sir")
     elif hour >= 12 and hour < 18:
-        speak("good afternoon sir")
+        speak("good afternoon ,")
     else:
-        speak("good evening sir")
+        speak("good evening ,")
 
-    speak("hello sir i am gogo , how may i help you?")
+    speak("i am gogo , how may i help you?")
 
 
 def take():
@@ -67,7 +81,7 @@ while True:
     searchstring = query.split()
 
     for i in range(1 , len(searchstring) - 1):
-        if(searchstring[i] == 'on' or 'On'):
+        if(searchstring[i] == 'on' or 'On' and i == Findorder(searchstring)):
             newstring = searchstring[1:i]
             website = searchstring[i+1:]
 
@@ -79,7 +93,7 @@ while True:
         print(results)
         speak(results)
     elif 'search'  in query:
-        speak("sure sir , searching" + Tostring(newstring) + "on" + str(website[0]) + ",")
+        speak("sure , searching" + Tostring(newstring) + "on" + str(website[0]) + ",")
         # noinspection PyUnboundLocalVariable
         webbrowser.open("https://" + str(website[0]) + ".com" + "/search?q=" + Tostring(newstring), new=1, autoraise=True)
 
@@ -93,7 +107,7 @@ while True:
 
     elif 'the time' in query:
         strTime = datetime.datetime.now().strftime("%H:%M:%S")
-        speak(f"Sir the time is {strTime}")
+        speak(f"the time is {strTime}")
 
     elif 'send email' in query:
         try:
@@ -108,6 +122,9 @@ while True:
         except Exception as e:
             print(e)
             speak("sorry sir, couldn't send mail")
+    else:
+        response = app.get_bot_response(query)
+        speak(response)
 
 
 
