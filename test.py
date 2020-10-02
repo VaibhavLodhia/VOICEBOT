@@ -9,13 +9,16 @@ import app
 import pywhatkit as kit
 import urllib.request
 
+
+
+
 contact = {'vaibhav': 'antrikshmisri61@gmail'}
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 print(voices)
 engine.setProperty('voice', voices[0].id)
-
 endst = ['bye' , 'goodbye' , 'end' , 'exit' , 'stop' , 'stop listening' , 'terminate']
+platforms = ['youtube' ,'YouTube' , 'Youtube' , 'Spotify' , 'spotify']
 #training the voicebot
 app.trainbot()
 
@@ -26,10 +29,9 @@ def Tostring(s):
 
 def Findorder(s):
     k=0
-    for i in range(len(s) - 1):
+    for i in range(len(s)):
         if(s[i] == 'on'):
             k=i
-
     return k
 
 def connect(host='http://google.com'):
@@ -107,12 +109,19 @@ while True:
 
 
     elif 'play music' in query:
-        if(Findorder(searchstring) != 0 and connect() == True):
-            website = searchstring[i+1:]
-            speak("what genre do you want to play?")
-            genre = take().lower()
-            speak("sure , playing" + genre + "music on" + Tostring(website))
-            kit.playonyt(genre + " music")
+        if('on' in searchstring and connect() == True):
+            index = Findorder(searchstring)
+            website = searchstring[index+1:]
+            website = Tostring(website)
+            while website not in platforms:
+                speak("Please Mention a valid platform")
+                website = take().lower()
+            speak("what song do you want to play?")
+            song = take().lower()
+            speak("sure , playing" + song + "on" + website)
+            if(website == 'youtube' or 'Youtube'):
+                kit.playonyt(song + " song")
+
         else:
             speak("sure sir")
             music_dir = 'D:\\songs'
