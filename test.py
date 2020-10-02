@@ -6,6 +6,8 @@ import webbrowser
 import os
 import smtplib
 import app
+import pywhatkit as kit
+import urllib.request
 
 contact = {'vaibhav': 'antrikshmisri61@gmail'}
 engine = pyttsx3.init('sapi5')
@@ -13,7 +15,7 @@ voices = engine.getProperty('voices')
 print(voices)
 engine.setProperty('voice', voices[0].id)
 
-
+endst = ['bye' , 'goodbye' , 'end' , 'exit' , 'stop' , 'stop listening' , 'terminate']
 #training the voicebot
 app.trainbot()
 
@@ -30,6 +32,12 @@ def Findorder(s):
 
     return k
 
+def connect(host='http://google.com'):
+    try:
+        urllib.request.urlopen(host)
+        return True
+    except:
+        return False
 
 def sendemail(to,content):
     server = smtplib.SMTP('smtp.gmail.com',587)
@@ -99,11 +107,18 @@ while True:
 
 
     elif 'play music' in query:
-        speak("sure sir")
-        music_dir = 'D:\\songs'
-        songs = os.listdir(music_dir)
-        print(songs)
-        os.startfile(os.path.join(music_dir, songs[0]))
+        if(Findorder(searchstring) != 0 and connect() == True):
+            website = searchstring[i+1:]
+            speak("what genre do you want to play?")
+            genre = take().lower()
+            speak("sure , playing" + genre + "music on" + Tostring(website))
+            kit.playonyt(genre + " music")
+        else:
+            speak("sure sir")
+            music_dir = 'D:\\songs'
+            songs = os.listdir(music_dir)
+            print(songs)
+            os.startfile(os.path.join(music_dir, songs[0]))
 
     elif 'the time' in query:
         strTime = datetime.datetime.now().strftime("%H:%M:%S")
@@ -122,6 +137,9 @@ while True:
         except Exception as e:
             print(e)
             speak("sorry sir, couldn't send mail")
+    elif(query in endst):
+        speak("Goodbye , have a nice day")
+        exit("1: User terminated program")
     else:
         response = app.get_bot_response(query)
         speak(response)

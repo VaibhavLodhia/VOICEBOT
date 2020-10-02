@@ -23,11 +23,11 @@ def trainbot():
 def get_bot_response(string):
     userText = string
     if(userText == "what is your name" or userText == "who are you" or userText == "what is your name?"):
-        return str("My name is Ciara Bot")
+        return str("My name is GoGo Bot")
     elif(userText == "i am antriksh"):
         return str("Hi! Antriksh")
     elif(userText == 'who made you' or userText == 'who made you?' or userText == 'who is your father'):
-        return str('A guy named Antriksh made me')
+        return str('i was made by , vaibhav and antriksh')
     else:
         return str(english_bot.get_response(userText))
 
